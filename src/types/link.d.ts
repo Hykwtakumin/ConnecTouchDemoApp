@@ -1,27 +1,11 @@
-declare module '*/link' {
-    interface link {
-        _id :{
-            $oid: string    //
-        },
-        time : string,  //UNIX timestamp
-        url: string | undefined,    //related URL
-        link: [
-            string, //readerId
-            string  //cardId
-            ]
-    }
-    const value: link;
-    export = value;
-}
-
-export interface links {
+export type Links = {
     _id :{
-        $oid: string
+        $oid: string    //mongoのID
     },
-    time : string,
-    url: string | undefined,
+    time : string,  //UNIXタイムスタンプ
+    url: string | undefined,    //Url
     link: [
-        string,
-        string
+        string, //0番目の要素がreaderID
+        string  //1番目の要素がcardId
         ]
 }

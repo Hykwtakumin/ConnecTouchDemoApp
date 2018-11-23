@@ -4,8 +4,9 @@ import { StyleSheet, css } from "aphrodite";
 import { Layout, Button, Icon, List, Modal } from "antd";
 import "antd/dist/antd.css";
 const { Content, Footer } = Layout;
-import { client } from "../Utils/Client";
-import axios from "axios";
+import {Links} from "../types/link";
+import 'moment/locale/ja'
+import moment from "moment";
 
 const styles = StyleSheet.create({
     btn: {
@@ -19,30 +20,28 @@ const styles = StyleSheet.create({
 });
 
 const ReloadButton = props => {
-    const { links, loadLinks } = props;
+    const { links } = props;
+
+    //linkをヒューマンリーダブルな文字列に変換して表示する
+    const readable = (item : Links) => {
+        const readerId = item.link[0];
+        const cardId = item.link[1];
+        const time = moment.unix(parseInt(item.time)).fromNow();
+        // const time = moment.unix(parseInt(item.time)).format("YYYY-MM-DD HH:mm") as string;
+        return `${cardId}が${readerId}にタッチしました :${time}`
+    };
 
     return (
         <div>
-            <Button
-                className={css(styles.btn)}
-                type="primary"
-                icon="redo"
-                size="large"
-                onClick={loadLinks}
-            >
-                タッチ情報を読み込む
-            </Button>
-
             <Content className={css(styles.linkListArea)}>
                 <List
-                    header={<div>Laps</div>}
+                    header={<div>Links</div>}
                     bordered
-                    dataSource={links as Array<string>}
+                    dataSource={links as Array<Links>}
                     renderItem={item => (
                         <List.Item>
-                            {/* ラップタイム追加ボタンを押した段階での秒数 */}
                             Links{links.indexOf(item) + 1} :
-                            {item}
+                            {readable(item)}
                         </List.Item>
                     )}
                 />

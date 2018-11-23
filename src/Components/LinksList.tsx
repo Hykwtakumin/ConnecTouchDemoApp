@@ -1,18 +1,19 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { StyleSheet, css } from "aphrodite";
-import { Layout, Button, Icon, List, message } from "antd";
+import { Layout, Button, Icon, List, message, notification } from "antd";
 import "antd/dist/antd.css";
 import ReloadButton from "./ReloadButton";
 import {client} from "../Utils/Client";
 import moment from "moment";
-// import links from "../types/link"
+import {Links} from "../types/link";
 const { Content, Footer } = Layout;
 
 
 const styles = StyleSheet.create({
     container: {
         fontFamily: "sans-serif",
+        alignSelf: "center",
         textAlign: "center"
     },
     timerArea: {
@@ -26,24 +27,11 @@ const styles = StyleSheet.create({
         marginBottom: "3%"
     },
     linkListArea: {
-        width: "60%",
+        width: "80%",
         alignSelf: "center",
         textAlign: "center"
     }
 });
-
-//ConnecTouchのLinks
-interface links {
-    _id :{
-        $oid: string
-    },
-    time : string,
-    url: string | undefined,
-    link: [
-        string,
-        string
-        ]
-}
 
 interface defaultProps {
     defaultState: defaultState;
@@ -52,7 +40,7 @@ interface defaultProps {
 interface defaultState {
     isActivated: boolean; //mailアドレス or IDが登録されているか否か?
     filter: string; //フィルターとなる文字列
-    links: Array<string>; //ラップタイムが格納される配列
+    links: Array<Links>; //linkが格納される配列
 }
 
 class LinksList extends React.Component<defaultProps, defaultState> {
@@ -65,42 +53,80 @@ class LinksList extends React.Component<defaultProps, defaultState> {
             links: links
         };
     }
+    componentDidMount() {
+        setInterval(this.pollingLinks, 1000);
+    };
 
-    //ボタンを押すとhttp://connectouch.org/linksからlinkを取得してくる
-    loadLinks = async () => {
-        const clientRes = await client.get("links?limit=1000", {});
-        if (clientRes.status == 200) {
-            try {
-                const resJson = await clientRes.data;
-                console.dir(resJson);
-                const loadedLinks = resJson.map(item => {
-                    const parsedLink = item as links;
-                    const id = parsedLink._id.$oid as string;
-                    const time = moment.unix(parseInt(parsedLink.time)).format("YYYY-MM-DD HH:mm") as string;
-                    const url = parsedLink.url as string;
-                    const readerId = parsedLink.link[0] as string;
-                    const cardId = parsedLink.link[1] as string;
+    componentWillUnmount() {
+        clearInterval();
+    }
 
-                    return `id:${id}, time:${time}, url:${url}, readerId:${readerId}, cardId:${cardId}`;
-                    // return JSON.stringify(item);
+    //新旧linksの差分を求める関数
+    //差があるモノは新着とする
+    getLinksDiff = (oldLinks :Array<Links>, newLinks :Array<Links>) => {
+
+        const oldIdArray = oldLinks.map(item => item._id.$oid);
+
+        const isContained = (link :Links): boolean => {
+            return oldIdArray.includes(link._id.$oid);
+        };
+
+        const diffLinks = newLinks.reduce((prev, curr) => {
+            if (!isContained(curr)) {
+                prev.push(curr)
+            }
+            return prev
+        }, []);
+
+        console.log(`更新差分数 : ${diffLinks.length}`);
+        if (diffLinks.length < 5) {
+            diffLinks.forEach(link => {
+                const parsedLink = link;
+                const readerId = parsedLink.link[0] as string;
+                const cardId = parsedLink.link[1] as string;
+                notification.info({
+                    message: "Suicaがタッチされました!",
+                    description: `リーダー:${readerId},　カード:${cardId}`
                 });
+            });
+        }
+    };
+
+    pollingLinks = async () => {
+        const currentLinks = this.state.links; //現在保持しているlinks
+        // const clientRes = await client.get("http://connectouch.org/links/", {}); //毎秒取得するlinks
+
+        const endPointUrl = `http://192.168.0.200/links?limit=10`;
+        const request = await fetch(endPointUrl);
+        if (request.status == 200) {
+            try {
+                // const resJson = await clientRes.data;
+                const loadedLinks = await request.json() as Array<Links>;
+                //サーバーから新しく取得した関数
+                // const loadedLinks = resJson as Array<Links>;
+                //currentLinksとloadedLinksとの差分を取る
+                this.getLinksDiff(currentLinks, loadedLinks);
+                //新しいLinksを格納する
                 this.setState({ links: loadedLinks })
             } catch (e) {
-                message.error(`error : ${e}`);
-                console.dir(e);
+                console.error(`error : ${e}`);
             }
         } else {
-            message.error("Something went wrong");
+            console.error("Something went wrong");
         }
+
     };
 
     render() {
         return (
             <div className={css(styles.container)}>
-                <ReloadButton
-                    links={this.state.links}
-                    loadLinks={this.loadLinks}
-                />
+                <Layout>
+                    <Content className={css(styles.linkListArea)}>
+                        <ReloadButton
+                            links={this.state.links}
+                        />
+                    </Content>
+                </Layout>
             </div>
         );
     }
