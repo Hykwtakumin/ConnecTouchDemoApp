@@ -1,13 +1,14 @@
 import * as React from "react";
-import { render } from "react-dom";
-import { StyleSheet, css } from "aphrodite";
-import { Layout, Button, Icon } from "antd";
+import {render} from "react-dom";
+import {css, StyleSheet} from "aphrodite";
+import {Layout} from "antd";
 import * as serviceWorker from './serviceWorker';
 import "antd/dist/antd.css";
-const { Header, Content, Footer } = Layout;
 import './index.css';
 import LinksList from "./Components/LinksList";
 import {Links} from "./types/link";
+
+const { Header, Content, Footer } = Layout;
 
 const styles = StyleSheet.create({
     headerArea: {
@@ -37,7 +38,7 @@ const App = () => (
                 <LinksList defaultState={{isActivated: false, filter: ``, links: [] as Array<Links>}}/>
             </Content>
             <Footer>
-                <a href="https://github.com/Hykwtakumin/ReactLapTimer">view source</a>
+                <a href="https://github.com/Hykwtakumin/ConnecTouchDemoApp">view source</a>
             </Footer>
         </Layout>
     </div>

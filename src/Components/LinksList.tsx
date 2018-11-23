@@ -1,13 +1,14 @@
 import * as React from "react";
-import { render } from "react-dom";
-import { StyleSheet, css } from "aphrodite";
-import { Layout, Button, Icon, List, message, notification } from "antd";
+import {css, StyleSheet} from "aphrodite";
+import {Layout, notification} from "antd";
 import "antd/dist/antd.css";
 import ReloadButton from "./ReloadButton";
-import {client} from "../Utils/Client";
-import moment from "moment";
 import {Links} from "../types/link";
-const { Content, Footer } = Layout;
+import 'dotenv/config';
+
+const {Content} = Layout;
+
+const fetchURL = process.env.FETCH_URL || "http://connectouch.org";
 
 
 const styles = StyleSheet.create({
@@ -96,7 +97,7 @@ class LinksList extends React.Component<defaultProps, defaultState> {
         const currentLinks = this.state.links; //現在保持しているlinks
         // const clientRes = await client.get("http://connectouch.org/links/", {}); //毎秒取得するlinks
 
-        const endPointUrl = `http://192.168.0.200/links?limit=10`;
+        const endPointUrl = `${fetchURL}/links?limit=10`;
         const request = await fetch(endPointUrl);
         if (request.status == 200) {
             try {

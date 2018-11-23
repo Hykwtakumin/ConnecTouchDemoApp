@@ -1,12 +1,12 @@
 import * as React from "react";
-import { render } from "react-dom";
-import { StyleSheet, css } from "aphrodite";
-import { Layout, Button, Icon, List, Modal } from "antd";
+import {css, StyleSheet} from "aphrodite";
+import {Layout, List} from "antd";
 import "antd/dist/antd.css";
-const { Content, Footer } = Layout;
 import {Links} from "../types/link";
 import 'moment/locale/ja'
 import moment from "moment";
+
+const {Content} = Layout;
 
 const styles = StyleSheet.create({
     btn: {
