@@ -1,6 +1,6 @@
 import * as React from "react";
 import { css, StyleSheet } from "aphrodite";
-import { List, Avatar, Skeleton } from "antd";
+import { List, Avatar, Icon, Spin } from "antd";
 import "antd/dist/antd.css";
 import { Links } from "../types/link";
 import "moment/locale/ja";
@@ -14,6 +14,15 @@ const styles = StyleSheet.create({
     width: "90vw",
     marginLeft: "auto",
     marginRight: "auto",
+  },
+  spinner: {
+    position: "relative",
+    top: "50%",
+    left: "40vw",
+    transform: "translataY(-50%)",
+  },
+  spinContainer: {
+    height: "50vh;",
   },
 });
 
@@ -38,7 +47,13 @@ const ReloadButton: React.SFC<Props> = props => {
     };
   };
 
-  return (
+  const Spinner = <Icon type="loading" spin style={{ fontSize: "20vw" }} />;
+
+  return links.length === 0 ? (
+    <div className={css(styles.spinContainer)}>
+      <Spin className={css(styles.spinner)} indicator={Spinner} />
+    </div>
+  ) : (
     <List
       className={css(styles.linkListArea)}
       itemLayout="vertical"
@@ -47,18 +62,16 @@ const ReloadButton: React.SFC<Props> = props => {
         const { cardId, readerId, time } = readable(item);
         return (
           <List.Item key={item.cardId}>
-            <Skeleton loading={links.length === 0} active avatar>
-              <List.Item.Meta
-                avatar={<Avatar src={demo_icon} />}
-                title={<div>{cardId}</div>}
-                description={
-                  <div>
-                    {readerId}にタッチ
-                    <span style={{ float: "right" }}>{time}</span>
-                  </div>
-                }
-              />
-            </Skeleton>
+            <List.Item.Meta
+              avatar={<Avatar src={demo_icon} />}
+              title={<div>{cardId}</div>}
+              description={
+                <div>
+                  {readerId}にタッチ
+                  <span style={{ float: "right" }}>{time}</span>
+                </div>
+              }
+            />
           </List.Item>
         );
       }}
