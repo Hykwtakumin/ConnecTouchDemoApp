@@ -1,49 +1,56 @@
 import * as React from "react";
-import {render} from "react-dom";
-import {css, StyleSheet} from "aphrodite";
-import {Layout} from "antd";
-import * as serviceWorker from './serviceWorker';
-import "antd/dist/antd.css";
-import './index.css';
+import { render } from "react-dom";
+import { css, StyleSheet } from "aphrodite";
+import { Layout } from "antd";
+import * as serviceWorker from "./serviceWorker";
+import "antd/dist/antd.min.css";
+import "./index.css";
 import LinksList from "./Components/LinksList";
-import {Links} from "./types/link";
+import { Links } from "./types/link";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 const styles = StyleSheet.create({
-    headerArea: {
-        color: "	#ffffff"
-    },
-    paragraphArea: {
-        marginTop: "3%"
-    },
-    contentArea: {
-        fontFamily: "sans-serif",
-        textAlign: "center",
-        width: "100%",
-        height: "100%"
-    }
+  headerArea: {
+    width: "100vw",
+    height: "10vh",
+  },
+  headerTxt: {
+    color: "#ffffff",
+    textAlign: "center",
+    position: "relative",
+    top: "50%",
+    transform: "translateY(-50%)",
+  },
+  paragraphArea: {
+    margin: "5%",
+  },
+  contentArea: {
+    fontFamily: "sans-serif",
+    width: "100vw",
+    height: "100vh",
+  },
 });
 
 const App = () => (
-    <div className={css(styles.contentArea)}>
-        <Layout>
-            <Header>
-                <h1 className={css(styles.headerArea)}>ConnecTouch Mobile</h1>
-            </Header>
-            <Content>
-                <h2 className={css(styles.paragraphArea)}>
-                    ConnecTouchのデモアプリです
-                </h2>
-                <LinksList defaultState={{isActivated: false, filter: ``, links: [] as Array<Links>}}/>
-            </Content>
-            <Footer>
-                <a href="https://github.com/Hykwtakumin/ConnecTouchDemoApp">view source</a>
-            </Footer>
-        </Layout>
-    </div>
+  <div className={css(styles.contentArea)}>
+    <Layout>
+      <Header className={css(styles.headerArea)}>
+        <h2 className={css(styles.headerTxt)}>ConnecTouch Mobile</h2>
+      </Header>
+      <Content>
+        <LinksList
+          defaultState={{
+            isActivated: false,
+            filter: ``,
+            links: [] as Array<Links>,
+          }}
+        />
+      </Content>
+    </Layout>
+  </div>
 );
 
 render(<App />, document.getElementById("root"));
 
-serviceWorker.unregister();
+serviceWorker.register();
