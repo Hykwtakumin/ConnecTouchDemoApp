@@ -29,3 +29,6 @@ yarn-error.log*
 /bin/
 *.test
 *.swp
+
+.idea
+.vscode
