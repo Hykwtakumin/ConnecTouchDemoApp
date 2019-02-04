@@ -87,7 +87,7 @@ const ReloadButton: React.SFC<Props> = props => {
                 title={<div>{cardId}</div>}
                 description={
                   <div>
-                    {readerId}にタッチ
+                    {readerId} にタッチしました。
                     <span style={{ float: "right" }}>{time}</span>
                   </div>
                 }
