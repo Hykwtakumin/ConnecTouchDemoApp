@@ -7,6 +7,7 @@ import "antd/dist/antd.min.css";
 import "./index.css";
 import LinksList from "./Components/LinksList";
 import { Links } from "./types/link";
+import { PageTopButton } from "./Components/PageTopButton";
 
 const { Header, Content } = Layout;
 
@@ -21,9 +22,6 @@ const styles = StyleSheet.create({
     position: "relative",
     top: "50%",
     transform: "translateY(-50%)",
-  },
-  paragraphArea: {
-    margin: "5%",
   },
   contentArea: {
     fontFamily: "sans-serif",
@@ -48,6 +46,7 @@ const App = () => (
           }}
         />
       </Content>
+      <PageTopButton />
     </Layout>
   </div>
 );
