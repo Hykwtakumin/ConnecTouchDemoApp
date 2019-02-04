@@ -1,13 +1,12 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { css, StyleSheet } from "aphrodite";
-import { Layout } from "antd";
+import { Layout, BackTop } from "antd";
 import * as serviceWorker from "./serviceWorker";
 import "antd/dist/antd.min.css";
 import "./index.css";
 import LinksList from "./Components/LinksList";
 import { Links } from "./types/link";
-import { PageTopButton } from "./Components/PageTopButton";
 
 const { Header, Content } = Layout;
 
@@ -46,7 +45,7 @@ const App = () => (
           }}
         />
       </Content>
-      <PageTopButton />
+      <BackTop />
     </Layout>
   </div>
 );
