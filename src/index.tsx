@@ -7,6 +7,7 @@ import "antd/dist/antd.min.css";
 import "./index.css";
 import LinksList from "./Components/LinksList";
 import { Links } from "./types/link";
+import PullRefresh from "react-pullrefresh";
 
 const { Header, Content } = Layout;
 
@@ -30,24 +31,26 @@ const styles = StyleSheet.create({
 });
 
 const App = () => (
-  <div className={css(styles.contentArea)}>
-    <Layout>
-      <Header className={css(styles.headerArea)}>
-        <h2 className={css(styles.headerTxt)}>ConnecTouch Mobile</h2>
-      </Header>
-      <Content>
-        <LinksList
-          defaultState={{
-            isActivated: false,
-            filter: ``,
-            links: [] as Array<Links>,
-            limit: null,
-          }}
-        />
-      </Content>
-      <BackTop />
-    </Layout>
-  </div>
+  <PullRefresh onRefresh={() => window.location.reload()}>
+    <div className={css(styles.contentArea)}>
+      <Layout>
+        <Header className={css(styles.headerArea)}>
+          <h2 className={css(styles.headerTxt)}>ConnecTouch Mobile</h2>
+        </Header>
+        <Content>
+          <LinksList
+            defaultState={{
+              isActivated: false,
+              filter: ``,
+              links: [] as Array<Links>,
+              limit: null,
+            }}
+          />
+        </Content>
+        <BackTop />
+      </Layout>
+    </div>
+  </PullRefresh>
 );
 
 render(<App />, document.getElementById("root"));
