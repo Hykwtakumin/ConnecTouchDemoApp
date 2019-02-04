@@ -73,6 +73,7 @@ const ReloadButton: React.SFC<Props> = props => {
             className={css(styles.loadBtn)}
             loading={links.length != props.limit}
             size="large"
+            shape="round"
           >
             Load more
           </Button>
