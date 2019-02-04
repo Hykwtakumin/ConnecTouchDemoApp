@@ -44,6 +44,7 @@ const App = () => (
             isActivated: false,
             filter: ``,
             links: [] as Array<Links>,
+            limit: null,
           }}
         />
       </Content>
