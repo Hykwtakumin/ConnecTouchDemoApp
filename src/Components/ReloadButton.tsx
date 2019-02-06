@@ -1,6 +1,6 @@
 import * as React from "react";
 import { css, StyleSheet } from "aphrodite";
-import { List, Avatar, Icon, Spin } from "antd";
+import { List, Avatar, Icon, Spin, Button } from "antd";
 import "antd/dist/antd.css";
 import { Links } from "../types/link";
 import "moment/locale/ja";
@@ -24,10 +24,18 @@ const styles = StyleSheet.create({
   spinContainer: {
     height: "50vh;",
   },
+  loadBtn: {
+    display: "block",
+    marginTop: "10%",
+    marginRight: "auto",
+    marginLeft: "auto",
+  },
 });
 
 interface Props {
   links: Links[];
+  limit: number;
+  limitIncr: () => void;
 }
 
 const ReloadButton: React.SFC<Props> = props => {
@@ -54,28 +62,41 @@ const ReloadButton: React.SFC<Props> = props => {
       <Spin className={css(styles.spinner)} indicator={Spinner} />
     </div>
   ) : (
-    <List
-      className={css(styles.linkListArea)}
-      itemLayout="vertical"
-      dataSource={links}
-      renderItem={item => {
-        const { cardId, readerId, time } = readable(item);
-        return (
-          <List.Item key={item.cardId}>
-            <List.Item.Meta
-              avatar={<Avatar src={demo_icon} />}
-              title={<div>{cardId}</div>}
-              description={
-                <div>
-                  {readerId}にタッチ
-                  <span style={{ float: "right" }}>{time}</span>
-                </div>
-              }
-            />
-          </List.Item>
-        );
-      }}
-    />
+    <>
+      <List
+        className={css(styles.linkListArea)}
+        itemLayout="vertical"
+        dataSource={links}
+        loadMore={
+          <Button
+            onClick={props.limitIncr}
+            className={css(styles.loadBtn)}
+            loading={links.length != props.limit}
+            size="large"
+            shape="round"
+          >
+            Load more
+          </Button>
+        }
+        renderItem={item => {
+          const { cardId, readerId, time } = readable(item);
+          return (
+            <List.Item key={item.cardId}>
+              <List.Item.Meta
+                avatar={<Avatar src={demo_icon} />}
+                title={<div>{cardId}</div>}
+                description={
+                  <div>
+                    {readerId} にタッチしました。
+                    <span style={{ float: "right" }}>{time}</span>
+                  </div>
+                }
+              />
+            </List.Item>
+          );
+        }}
+      />
+    </>
   );
 };
 

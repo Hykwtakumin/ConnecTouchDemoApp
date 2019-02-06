@@ -25,6 +25,7 @@ interface defaultState {
   isActivated: boolean; //mailアドレス or IDが登録されているか否か?
   filter: string; //フィルターとなる文字列
   links: Array<Links>; //linkが格納される配列
+  limit: number;
 }
 
 class LinksList extends React.Component<defaultProps, defaultState> {
@@ -35,6 +36,7 @@ class LinksList extends React.Component<defaultProps, defaultState> {
       isActivated: isActivated,
       filter: filter,
       links: links,
+      limit: 10,
     };
   }
   componentDidMount() {
@@ -75,11 +77,15 @@ class LinksList extends React.Component<defaultProps, defaultState> {
     }
   };
 
+  limitIncr = () => {
+    this.setState({ limit: this.state.limit + 10 });
+  };
+
   pollingLinks = async () => {
     const currentLinks = this.state.links; //現在保持しているlinks
     // const clientRes = await client.get("http://connectouch.org/links/", {}); //毎秒取得するlinks
 
-    const endPointUrl = `${fetchURL}/links?limit=10`;
+    const endPointUrl = `${fetchURL}/links?limit=${this.state.limit}`;
     const request = await fetch(endPointUrl);
     if (request.status == 200) {
       try {
@@ -102,7 +108,11 @@ class LinksList extends React.Component<defaultProps, defaultState> {
   render() {
     return (
       <div className={css(styles.container)}>
-        <ReloadButton links={this.state.links} />
+        <ReloadButton
+          links={this.state.links}
+          limitIncr={this.limitIncr}
+          limit={this.state.limit}
+        />
       </div>
     );
   }
