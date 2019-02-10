@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
     fontFamily: "sans-serif",
     width: "100vw",
     marginTop: "5%",
-    marginBottom: "5%"
-  }
+    marginBottom: "5%",
+  },
 });
 
 export const LinksListWrapper: FC<{}> = () => {
@@ -28,7 +28,7 @@ export const LinksListWrapper: FC<{}> = () => {
   useEffect(() => {
     const timerId = setInterval(polingLinks, 1000);
     return () => clearInterval(timerId);
-  }, []);
+  }, [fetchLimitNum, links]);
 
   const polingLinks = async () => {
     const currentLinks = links;
@@ -70,7 +70,7 @@ export const LinksListWrapper: FC<{}> = () => {
         const cardId = parsedLink.link[1] as string;
         notification.info({
           message: "Suicaがタッチされました。",
-          description: `リーダー：${readerId}\nカード：${cardId}`
+          description: `リーダー：${readerId}\nカード：${cardId}`,
         });
       });
     }
