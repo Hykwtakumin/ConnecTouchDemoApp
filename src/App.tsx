@@ -2,7 +2,6 @@ import * as React from "react";
 import { css, StyleSheet } from "aphrodite";
 import { Layout, BackTop } from "antd";
 import PullRefresh from "react-pullrefresh";
-import "./App.css";
 import { LinksListWrapper } from "./Components/LinksListWrapper";
 
 const { Header, Content } = Layout;
@@ -10,20 +9,20 @@ const { Header, Content } = Layout;
 const styles = StyleSheet.create({
   headerArea: {
     width: "100vw",
-    height: "10vh",
+    height: "10vh"
   },
   headerTxt: {
     color: "#ffffff",
     textAlign: "center",
     position: "relative",
     top: "50%",
-    transform: "translateY(-50%)",
+    transform: "translateY(-50%)"
   },
   contentArea: {
     fontFamily: "sans-serif",
     width: "100vw",
-    height: "100vh",
-  },
+    height: "100vh"
+  }
 });
 
 export const App = () => (
