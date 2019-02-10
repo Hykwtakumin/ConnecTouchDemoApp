@@ -7,7 +7,7 @@
     "@types/node": "10.12.23",
     "@types/react": "16.8.2",
     "@types/react-dom": "16.8.0",
-    "antd": "3.13.2",
+    "antd": "^3.13.2",
     "aphrodite": "2.2.3",
     "asearch": "0.0.7",
     "axios": "0.18.0",
